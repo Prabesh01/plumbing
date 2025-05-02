@@ -60,12 +60,20 @@ function fn_backup {
         clean_path=$(realpath -m "$file")
         relative_path="${clean_path#/}" # remove leading slash
 
-        dest_path="${BACKUP_DIR}/data_files/${relative_path}"
-        dest_dir=$(dirname "${dest_path}")
-        mkdir -p "${dest_dir}"
+        # to use rsync, below 4 lines
+        local_dest="${BACKUP_DIR}/data_files/$(dirname "${relative_path}")"
+        mkdir -p "${local_dest}"
 
-        echo "Backing up ${file} -> ${dest_path}"
-        rsync -r --progress --human-readable --human-readable -e ssh "root@${REMOTE}:${clean_path}" "${dest_path}"
+        echo "Backing up ${clean_path} -> ${BACKUP_DIR}/data_files/${relative_path}"
+        rsync -r --progress --human-readable --human-readable -e ssh "root@${REMOTE}:${clean_path}" "${local_dest}/"
+
+        # to use scp, below lines till done
+        # dest_path="${BACKUP_DIR}/data_files/${relative_path}"
+        # dest_dir=$(dirname "${dest_path}")
+        # mkdir -p "${dest_dir}"
+
+        # echo "Backing up ${file} -> ${dest_path}"
+        # scp -r "root@${REMOTE}:${clean_path}" "${dest_path}"
 
     done
 
