@@ -103,13 +103,14 @@ function fn_restore {
     done
 
     echo "* Restoring MongoDB"
-    scp -r "${BACKUP_DIR}/mongo" "${REMOTE_USER}@${REMOTE}:/root/export/"
-    ssh "${REMOTE_USER}@${REMOTE}" "for d in \$(ls /root/export/mongo); do mongorestore -d \$d /root/export/mongo/\$d; done"
+    ssh "root@${REMOTE}" "rm -rf /root/export/mongo && mkdir -p /root/export/mongo"
+    scp -r "${BACKUP_DIR}/mongo" "root@${REMOTE}:/root/export/"
+    ssh "root@${REMOTE}" "for d in \$(ls /root/export/mongo); do mongorestore -d \$d /root/export/mongo/\$d; done"
 
     # Restore crontab
     echo "* Restoring crontab"
-    scp "${BACKUP_DIR}/crontab/root_crontab.txt" "${REMOTE_USER}@${REMOTE}:/tmp/crontab.txt"
-    ssh "${REMOTE_USER}@${REMOTE}" "crontab /tmp/crontab.txt && rm /tmp/crontab.txt"
+    scp "${BACKUP_DIR}/crontab.txt" "root@${REMOTE}:/tmp/crontab.txt"
+    ssh "root@${REMOTE}" "crontab /tmp/crontab.txt && rm /tmp/crontab.txt"
 
     echo "Restore complete."
 }
