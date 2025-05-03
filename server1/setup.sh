@@ -4,6 +4,11 @@ set -e
 apt update -y
 apt upgrade -y
 
+apt remove --purge snapd -yy
+apt-mark hold snapd
+apt autoremove -y
+rm -rf /root/snap
+
 #########################################################################################
 
 ## rutu
@@ -21,12 +26,12 @@ mkdir -p /var/log/rutu/
 ### pip
 # des: pip3 freeze | xargs pip3 uninstall -y
 
-apt install software-properties-common -y
-add-apt-repository universe
-apt update -y
+# apt install software-properties-common -y
+# add-apt-repository universe
+# apt update -y
 apt install python3-pip -y
 
-pip3 install discord.py pytz python-dotenv facebook-scraper nepali-datetime pymongo discord-webhook topggpy pillow nepali-unicode-converter wrapt-timeout-decorator asgiref openai
+pip3 install discord.py pytz python-dotenv facebook-scraper nepali-datetime pymongo discord-webhook topggpy pillow nepali-unicode-converter wrapt-timeout-decorator asgiref openai langdetect
 # scirpts/play.py
 pip3 install audioread pytube
 # scirpts/backup.py
@@ -61,8 +66,8 @@ mongo --eval 'db.getSiblingDB("admin").createUser({user: "Routiney", pwd: "sdhf6
 
 #### nginx
 
-systemctl stop apache2
-systemctl disable apache2
+systemctl stop apache2 > /dev/null 2>&1
+systemctl disable apache2 > /dev/null 2>&1
 apt remove apache2 -y
 apt install nginx -y
 systemctl enable --now nginx
@@ -136,6 +141,10 @@ curl https://raw.githubusercontent.com/Prabesh01/icpmap/refs/heads/main/mst-auto
 
 apt install php php-fpm -y
 systemctl enable --now php7.4-fpm
+
+systemctl stop apache2 > /dev/null 2>&1
+systemctl disable apache2 > /dev/null 2>&1
+apt remove apache2 -y
 
 cp /var/www/mamata/nginx.conf /etc/nginx/sites-available/mamata.conf
 ln -s /etc/nginx/sites-available/mamata.conf /etc/nginx/sites-enabled/mamata.conf
