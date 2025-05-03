@@ -26,13 +26,16 @@ if [ ! -d "$DEBOOTSTRAP_DIR" ]; then
 fi
 
 
-if [ ! -d "$CONTAINER_DIR" ]; then
-    echo "Creating new container directory..."
-    mkdir -p "$CONTAINER_DIR"
-    chmod 755 "$CONTAINER_DIR"
-    cp -a "$DEBOOTSTRAP_DIR/"* "$CONTAINER_DIR/"
+if [ -d "$CONTAINER_DIR" ]; then
+    echo "Using existing container."
+    fn_boot
+    exit
 fi
 
+echo "Creating new container directory..."
+mkdir -p "$CONTAINER_DIR"
+chmod 755 "$CONTAINER_DIR"
+cp -a "$DEBOOTSTRAP_DIR/"* "$CONTAINER_DIR/"
 
 systemd-nspawn --directory="$CONTAINER_DIR" -- bash -c "
 # * SYSTEM
@@ -45,7 +48,7 @@ systemctl enable systemd-networkd
 systemctl enable systemd-resolved  # needed since host also uses systemd-resolved
 
 # ** sshd
-apt install openssh-server curl -y
+apt install openssh-server curl nano -y
 mkdir -p ~/.ssh && curl https://github.com/Prabesh01.keys >> ~/.ssh/authorized_keys
 "
 
