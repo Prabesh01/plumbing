@@ -9,7 +9,7 @@ apt upgrade -y
 ## rutu
 # des: rm -rf rutu
 
-apt install git rsync -y
+apt install git -y
 
 mv rutu rutu.bk
 git clone https://gitlab.com/Prabesh01/rutu.git
