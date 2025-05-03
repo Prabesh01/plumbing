@@ -43,17 +43,21 @@ python3 /root/rutu/scripts/xutti.py
 
 apt-get install gnupg curl -y
 
-curl -fsSL https://www.mongodb.org/static/pgp/server-8.0.asc | \
-    gpg -o /usr/share/keyrings/mongodb-server-8.0.gpg \
-   --dearmor
-echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/8.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-8.0.list
+# curl -fsSL https://www.mongodb.org/static/pgp/server-8.0.asc | \
+#     gpg -o /usr/share/keyrings/mongodb-server-8.0.gpg \
+#    --dearmor
+# echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/8.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-8.0.list
+curl -fsSL https://www.mongodb.org/static/pgp/server-4.4.asc | sudo gpg --dearmor -o /usr/share/keyrings/mongodb-server-4.4.gpg
+echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-4.4.gpg ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list
 
 apt-get update -y
-apt-get install -y mongodb-org
+apt install -y mongodb-org
 systemctl enable --now mongod
 
 for d in $(ls /root/export/mongo); do mongorestore -d $d /root/export/mongo/$d; done
 rm -rf /root/export/mongo
+
+mongo --eval 'db.getSiblingDB("admin").createUser({user: "Routiney", pwd: "sdhf63br78fn@329", roles: ["root"]})'
 
 #### nginx
 
