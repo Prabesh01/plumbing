@@ -1,8 +1,7 @@
-
 ```
 ./main.sh backup --remote=prabesh
-./main.sh setup --remote=prabesh
 ./main.sh restore --remote=prabesh
+./main.sh setup --remote=prabesh
 ```
 
 ---
