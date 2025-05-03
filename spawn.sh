@@ -48,7 +48,7 @@ systemctl enable systemd-networkd
 systemctl enable systemd-resolved  # needed since host also uses systemd-resolved
 
 # ** sshd
-apt install openssh-server curl nano -y
+apt install openssh-server curl nano rsync -y
 mkdir -p ~/.ssh && curl https://github.com/Prabesh01.keys >> ~/.ssh/authorized_keys
 "
 
