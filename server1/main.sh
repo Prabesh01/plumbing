@@ -48,6 +48,8 @@ function fn_setup {
     echo '* setting up the server'
     read -p "You sure you have backedup every thing?"
     ssh "root@${REMOTE}" "bash -s" < "${PATH_pwd}/setup.sh"
+
+    echo '* setting up the server done'
 }
 
 
@@ -113,6 +115,13 @@ function fn_restore {
     # Restore crontab
     echo "* Restoring crontab"
     scp "${BACKUP_DIR}/crontab.txt" "root@${REMOTE}:/root/export/crontab.txt"
+
+    # Private repos
+    echo "* Restoring k"
+    git clone git@github.com:Prabesh01/mamatabhattarai.com.np.git "${PATH_pwd}/mamatabhattarai.com.np"
+    ssh "root@${REMOTE}" "mkdir -p /var/www/"
+    scp -r "${PATH_pwd}/mamatabhattarai.com.np" "root@${REMOTE}:/var/www/mamata"
+    rm -rf "${PATH_pwd}/mamatabhattarai.com.np"
 
     echo "Restore complete."
 }
