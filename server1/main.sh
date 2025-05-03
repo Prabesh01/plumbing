@@ -5,9 +5,11 @@ set -e
 
 
 data_files=(
-    "/root/discord/tg_message_record.json"
+    "/root/mst/tg_message_record.json"
+    "/root/mst/mst_creds.json"
     "/root/rutu/.env"
     "/root/rutu/data/"
+    "/root/radio/radio.sh"
 )
 mongo_dbs=(
     "mim"
@@ -95,22 +97,22 @@ function fn_restore {
     echo '* restoring data files to the vps server'
     BACKUP_DIR="${PATH_pwd}/backups/"
 
-    find "${BACKUP_DIR}/data_files" -type f | while read -r local_file; do
-        relative_path="${local_file#${BACKUP_DIR}/data_files/}"
-        remote_path="/${relative_path}"
-        echo "Restoring file ${local_file} -> ${remote_path}"
-        scp "${local_file}" "root@${REMOTE}:${remote_path}"
+    for file in "${data_files[@]}"; do
+        parent_dir=$(dirname "${file}")
+
+        ssh "root@${REMOTE}" "mkdir -p ${parent_dir}"
+
+        echo "Restoring: ${BACKUP_DIR}/data_files/${file} -> ${file}"
+        scp -r "${BACKUP_DIR}/data_files/${file}" "root@${REMOTE}":"${parent_dir}"
     done
 
-    echo "* Restoring MongoDB"
+    echo "* Restoring MongoDB files"
     ssh "root@${REMOTE}" "rm -rf /root/export/mongo && mkdir -p /root/export/mongo"
     scp -r "${BACKUP_DIR}/mongo" "root@${REMOTE}:/root/export/"
-    ssh "root@${REMOTE}" "for d in \$(ls /root/export/mongo); do mongorestore -d \$d /root/export/mongo/\$d; done"
 
     # Restore crontab
     echo "* Restoring crontab"
-    scp "${BACKUP_DIR}/crontab.txt" "root@${REMOTE}:/tmp/crontab.txt"
-    ssh "root@${REMOTE}" "crontab /tmp/crontab.txt && rm /tmp/crontab.txt"
+    scp "${BACKUP_DIR}/crontab.txt" "root@${REMOTE}:/root/export/crontab.txt"
 
     echo "Restore complete."
 }
