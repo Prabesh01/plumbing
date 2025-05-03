@@ -57,6 +57,9 @@ rm -rf /root/export/mongo
 
 #### nginx
 
+systemctl stop apache2
+systemctl disable apache2
+apt remove apache2 -y
 apt install nginx -y
 systemctl enable --now nginx
 
@@ -122,3 +125,39 @@ systemctl restart squid.service
 ## mst
 
 curl https://raw.githubusercontent.com/Prabesh01/icpmap/refs/heads/main/mst-automation/discord_tg_notification.py -o /root/mst/mst.py
+
+#########################################################################################
+
+## k
+
+apt install php php-fpm -y
+systemctl enable --now php7.4-fpm
+
+cp /var/www/mamata/nginx.conf /etc/nginx/sites-available/mamata.conf
+ln -s /etc/nginx/sites-available/mamata.conf /etc/nginx/sites-enabled/mamata.conf
+nginx -t
+nginx -s reload
+
+#########################################################################################
+
+## cookfood
+
+git clone https://github.com/Prabesh01/cookfood.git
+pip3 install flask gunicorn
+
+cp /root/cookfood/cookfood.conf /etc/nginx/sites-available/
+ln -s /etc/nginx/sites-available/cookfood.conf /etc/nginx/sites-enabled/cookfood.conf
+nginx -t
+nginx -s reload
+
+cp /root/cookfood/cookfood.service /etc/systemd/system/
+systemctl daemon-reload
+systemctl enable --now cookfood.service
+
+#########################################################################################
+
+## crontab restore
+
+crontab /root/export/crontab.txt
+rm -rf /root/export/
+
