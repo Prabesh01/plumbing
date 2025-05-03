@@ -9,9 +9,13 @@ apt upgrade -y
 ## rutu
 # des: rm -rf rutu
 
-apt install git -y
-cd /root/ && git clone https://gitlab.com/Prabesh01/rutu.git
-cd /root/rutu
+apt install git rsync -y
+
+mv rutu rutu.bk
+git clone https://gitlab.com/Prabesh01/rutu.git
+cp -r rutu.bk/. rutu/
+rm -rf /root/rutu.bk
+
 mkdir -p /var/log/rutu/
 
 ### pip
@@ -25,6 +29,8 @@ apt install python3-pip -y
 pip3 install discord.py pytz python-dotenv facebook-scraper nepali-datetime pymongo discord-webhook topggpy pillow nepali-unicode-converter wrapt-timeout-decorator asgiref openai
 # scirpts/play.py
 pip3 install audioread pytube
+# scirpts/backup.py
+apt install zip -y
 # web
 pip3 install fastapi jinja2 uvicorn
 
@@ -46,7 +52,7 @@ apt-get update -y
 apt-get install -y mongodb-org
 systemctl enable --now mongod
 
-for d in \$(ls /root/export/mongo); do mongorestore -d \$d /root/export/mongo/\$d; done
+for d in $(ls /root/export/mongo); do mongorestore -d $d /root/export/mongo/$d; done
 rm -rf /root/export/mongo
 
 #### nginx
