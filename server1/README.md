@@ -1,3 +1,6 @@
+- apt install openssh-server curl nano rsync
+- mkdir -p ~/.ssh && curl https://github.com/Prabesh01.keys >> ~/.ssh/authorized_keys
+
 ```
 ./main.sh backup --remote=prabesh
 ./main.sh restore --remote=prabesh
