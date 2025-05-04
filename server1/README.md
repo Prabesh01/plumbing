@@ -1,26 +1,21 @@
+# ./main.sh
+
+__personalized for my server #1 which hosts few stuffs__
+
+- Commands:
+```
+./main.sh backup --remote=ip_of_container_or_vps
+./main.sh restore --remote=ip_of_container_or_vps
+./main.sh setup --remote=ip_of_container_or_vps
+```
+
+- Fisrt, run backup command to backup required data from vps.
+- Then you can format/rebuild/reset the vps.
+- Backup keeps the data in backups_<date> dir. Rename it to backups dir as restore function looks for this dir.
+
+once the vps is rebuld/reset,
+
 - apt install openssh-server curl nano rsync
 - mkdir -p ~/.ssh && curl https://github.com/Prabesh01.keys >> ~/.ssh/authorized_keys
-
-```
-./main.sh backup --remote=prabesh
-./main.sh restore --remote=prabesh
-./main.sh setup --remote=prabesh
-```
-
----
-
-## Commands for manual backup:
-rsync -partial --progress --stats --human-readable --human-readable --exclude="proc/" --exclude="snap/" --exclude="kcore" --exclude=".git/" --exclude="node_modules" -e ssh root@prabesh:/ /home/prabesh/vps-backup/prabesh
-
-rsync -partial --progress --stats --human-readable --human-readable --exclude="proc/" --exclude="snap/" --exclude="kcore"  --exclude=".git/" --exclude="node_modules" -e ssh root@stock:/ /home/prabesh/vps-backup/stock
-
-sudo nano /etc/mongod.conf:
-```
-security:
-  authorization: disabled
-```
-
-mongodump -d mim -o /root/bla/mongo
-mongodump -d lb -o /root/bla/mongo
-
-crontab -l > crontab.txt
+- now run restore command to restore earlier backedup files.
+- finally run setup command and all set.
