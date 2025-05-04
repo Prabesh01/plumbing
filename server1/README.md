@@ -19,3 +19,15 @@ once the vps is rebuld/reset,
 - mkdir -p ~/.ssh && curl https://github.com/Prabesh01.keys >> ~/.ssh/authorized_keys
 - now run restore command to restore earlier backedup files.
 - finally run setup command and all set.
+
+### Change credentials
+
+- mongodb's credential is exposed here. even tho it can only be accessed from localhost, better to change creds and update it in `/root/rutu/.env` then restart bot.py, server.bot.py and web/main:app
+```
+mongo --eval 'db.getSiblingDB("admin").changeUserPassword("Routiney", "pass")'
+```
+- change squid credentials.
+```
+htpasswd -cb /etc/squid/passwords user pass
+systemctl restart squid
+```
