@@ -9,6 +9,8 @@ data_files=(
     "/root/htb-share/.env"
     "/root/ctf-discord-bot/ctfdash/db.sqlite3"
     "/root/ctf-discord-bot/ctfdash/uploads/"
+    "/root/ctf-discord-bot/.env"
+    "/root/ctf-discord-bot/ctfdash/.env"
     "/root/discord-vc-attendance/data/"
     "/root/discord-vc-attendance/data/.env"
 )
