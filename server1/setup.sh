@@ -1,5 +1,7 @@
-set -v
+set -x
 set -e
+
+export PS4='\033[4m\033[1;33m[EXEC]\033[0m \033[0m'
 
 apt update -y
 apt upgrade -y
