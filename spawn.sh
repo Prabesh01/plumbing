@@ -40,7 +40,7 @@ cp -a "$DEBOOTSTRAP_DIR/"* "$CONTAINER_DIR/"
 systemd-nspawn --directory="$CONTAINER_DIR" -- bash -c "
 # * SYSTEM
 echo "root:groot" | chpasswd
-echo 'ub' > /etc/hostname
+echo '$name' > /etc/hostname
 
 # ** network
 cp /usr/lib/systemd/network/80-container-ve.network /etc/systemd/network/
