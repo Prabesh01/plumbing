@@ -111,8 +111,12 @@ function fn_restore {
     # # Private repos
     for repo in "${private_repos[@]}"; do
         echo "* Restoring ${repo}"
+
         git clone git@github.com:Prabesh01/"${repo}".git "${PATH_pwd}/${repo}"
+        ssh "root@${REMOTE}" "mv /root/${repo} /root/${repo}.bk || true"
         scp -r "${PATH_pwd}/${repo}" "root@${REMOTE}:/root/${repo}"
+        ssh "root@${REMOTE}" "cp -r /root/${repo}.bk/. /root/${repo}/ || true"
+        ssh "root@${REMOTE}" "rm -rf /root/${repo}.bk"
         rm -rf "${PATH_pwd}/${repo}"
     done
 
