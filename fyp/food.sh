@@ -54,5 +54,5 @@ php artisan migrate
 php artisan key:generate
 
 # pass: testP@22
-mysql -e "INSERT INTO laravel.users (full_name,username,email,password,role,created_at,updated_at) VALUES ('admin','admin','a@d.min','\$2y\$12\$l8RkQaKord4CQvyeinQ9oefoC2WOu2KxCssI/EEfVi7OiDd.tNS.S','admin','2025-05-08 19:03:11','2025-05-08 19:03:11');"
-mysql -e "INSERT INTO laravel.users (full_name,username,email,password,role,created_at,updated_at) VALUES ('prabesh','prabesh','p@cote.ws','\$2y\$12\$l8RkQaKord4CQvyeinQ9oefoC2WOu2KxCssI/EEfVi7OiDd.tNS.S','general','2025-05-08 19:03:11','2025-05-08 19:03:11');"
+mysql -e "INSERT INTO laravel.users (full_name,username,email,password,role,created_at,updated_at) VALUES ('admin','admin','admin@icp.hoh','\$2y\$12\$l8RkQaKord4CQvyeinQ9oefoC2WOu2KxCssI/EEfVi7OiDd.tNS.S','admin','2025-05-08 19:03:11','2025-05-08 19:03:11');"
+mysql -e "INSERT INTO laravel.users (full_name,username,email,password,role,created_at,updated_at) VALUES ('ram','prabesh','ram@icp.hoh','\$2y\$12\$l8RkQaKord4CQvyeinQ9oefoC2WOu2KxCssI/EEfVi7OiDd.tNS.S','general','2025-05-08 19:03:11','2025-05-08 19:03:11');"
