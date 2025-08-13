@@ -68,8 +68,8 @@ mongo --eval 'db.getSiblingDB("admin").createUser({user: "Routiney", pwd: "sdhf6
 
 #### nginx
 
-systemctl stop apache2 > /dev/null 2>&1
-systemctl disable apache2 > /dev/null 2>&1
+systemctl stop apache2 > /dev/null 2>&1 || true
+systemctl disable apache2 > /dev/null 2>&1 || true
 apt remove apache2 -y
 apt install nginx -y
 systemctl enable --now nginx
