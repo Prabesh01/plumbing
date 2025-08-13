@@ -132,6 +132,50 @@ nginx -s reload
 
 #########################################################################################
 
+## danted
+
+DANTE_CONFIG="/etc/danted.conf"
+apt install dante-server -y
+mv "$DANTE_CONFIG" "$DANTE_CONFIG".bck
+
+> "$DANTE_CONFIG" cat <<<"internal: 0.0.0.0 port = 1080
+external: eth0
+
+socksmethod: none
+
+client pass {
+        from: 0.0.0.0/0 to: 0.0.0.0/0
+}
+
+socks pass {
+        from: 0.0.0.0/0 to: .web.telegram.org
+        command: bind connect udpassociate
+        log: connect error disconnect
+        socksmethod: none
+}
+"
+
+curl -sL "https://core.telegram.org/resources/cidr.txt" -o cidr.txt
+while read -r cidr; do
+    [[ -z "$cidr" ]] && continue
+    cat <<EOF >> "$DANTE_CONFIG"
+
+socks pass {
+    from: 0.0.0.0/0 to: $cidr port=https
+    command: bind connect udpassociate
+    log: connect error disconnect
+    socksmethod: none
+}
+EOF
+
+done < cidr.txt
+rm cidr.txt
+
+systemctl enable --now danted
+systemctl restart danted
+
+#########################################################################################
+
 ## ctfd
 
 curl https://gist.githubusercontent.com/Prabesh01/57643d03db9126659870153e893d37c5/raw/6cf9f199d2c456408f344f6ef91d5e65acdfe09a/ctfd.py -o /root/ctfd.py
