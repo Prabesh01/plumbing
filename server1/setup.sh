@@ -171,6 +171,69 @@ systemctl enable --now cookfood.service
 
 #########################################################################################
 
+## ntfy
+
+### install
+mkdir -p /etc/apt/keyrings
+curl -fsSL https://archive.heckel.io/apt/pubkey.txt | sudo gpg --dearmor -o /etc/apt/keyrings/archive.heckel.io.gpg
+apt install apt-transport-https -y
+sh -c "echo 'deb [arch=amd64 signed-by=/etc/apt/keyrings/archive.heckel.io.gpg] https://archive.heckel.io/apt debian main' \
+    > /etc/apt/sources.list.d/archive.heckel.io.list"
+apt update
+apt install ntfy -y
+
+### configure
+mv  /etc/ntfy/server.yml /etc/ntfy/server.yml.bck
+curl https://raw.githubusercontent.com/Prabesh01/my-ntfy-config/refs/heads/main/server.yml -o /etc/ntfy/server.yml
+
+mkdir /var/www/ntfy
+chown -R ntfy:ntfy /var/www/ntfy
+
+touch /var/lib/ntfy/user.db
+chown ntfy:ntfy /var/lib/ntfy/user.db
+
+### nginx
+curl https://raw.githubusercontent.com/Prabesh01/my-ntfy-config/refs/heads/main/ntfy.conf -o /etc/nginx/sites-available/ntfy.conf
+rm /etc/nginx/sites-enabled/ntfy.conf || true
+ln -s /etc/nginx/sites-available/ntfy.conf /etc/nginx/sites-enabled/
+nginx -t
+nginx -s reload
+
+### certbot
+apt install certbot python3-certbot-nginx -y
+certbot --nginx -d notif.cote.ws --non-interactive --no-redirect --agree-tos -m prabesh@cote.ws
+
+sed -i '/listen 443 ssl;/i \
+}\nserver {\nserver_name notif.cote.ws;\n \
+' /etc/nginx/sites-available/ntfy.conf
+
+sed -i '$ s@}$@\
+  location / {\
+    proxy_pass http://127.0.0.1:40714;\
+    proxy_http_version 1.1;\
+\
+    proxy_buffering off;\
+    proxy_request_buffering off;\
+    proxy_redirect off;\
+\
+    proxy_set_header Host $http_host;\
+    proxy_set_header Upgrade $http_upgrade;\
+    proxy_set_header Connection "upgrade";\
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\
+\
+    proxy_connect_timeout 3m;\
+    proxy_send_timeout 3m;\
+    proxy_read_timeout 3m;\
+\
+    client_max_body_size 0;\
+  }\
+}@' /etc/nginx/sites-available/ntfy.conf
+
+sudo systemctl enable --now ntfy
+systemctl restart ntfy
+
+#########################################################################################
+
 ## crontab restore
 
 crontab /root/export/crontab.txt
