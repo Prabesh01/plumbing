@@ -9,7 +9,7 @@ __personalized for my server #1 which hosts few stuffs__
 ./main.sh setup --remote=ip_of_container_or_vps
 ```
 
-- Fisrt, run backup command to backup required data from vps.
+- First, run backup command to backup required data from vps.
 - Then you can format/rebuild/reset the vps.
 - Backup keeps the data in backups_<date> dir. Rename it to backups dir as restore function looks for this dir.
 
