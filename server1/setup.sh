@@ -33,8 +33,8 @@ mkdir -p /var/log/rutu/
 # apt update -y
 apt install python3-pip -y
 
-pip3 install discord.py pytz python-dotenv facebook-scraper nepali-datetime pymongo discord-webhook topggpy pillow nepali-unicode-converter wrapt-timeout-decorator asgiref openai langdetect
-# scirpts/play.py
+pip3 install discord.py pytz python-dotenv facebook-scraper nepali-datetime pymongo discord-webhook topggpy pillow nepali-unicode-converter wrapt-timeout-decorator asgiref openai langdetect PyNaCl
+# scripts/play.py
 pip3 install audioread pytube
 # scirpts/backup.py
 apt install zip -y
