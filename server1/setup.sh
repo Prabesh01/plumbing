@@ -79,6 +79,8 @@ ln -s /etc/nginx/sites-available/ronb.conf /etc/nginx/sites-enabled/ronb.conf
 nginx -t
 nginx -s reload
 
+certbot --nginx -d ronb.cote.ws --non-interactive --no-redirect --agree-tos -m prabesh@cote.ws
+
 ### start web
 nohup env PYTHONPATH=/root/rutu/web/ uvicorn main:app --host 0.0.0.0 --port 8000 > /var/log/rutu/web.log 2>&1 &
 
