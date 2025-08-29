@@ -10,6 +10,7 @@ data_files=(
     "/root/rutu/.env"
     "/root/rutu/data/"
     "/root/radio/radio.sh"
+    "/etc/ntfy/server.yml"
 )
 mongo_dbs=(
     "mim"
